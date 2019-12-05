@@ -23,3 +23,9 @@ resource "google_storage_bucket" "contents" {
   name     = "develop-rabee-contents"
   location = "${lookup(var.location, "${terraform.workspace}")}"
 }
+
+resource "google_storage_bucket_access_control" "public_rule" {
+  bucket = google_storage_bucket.contents.name
+  role   = "READER"
+  entity = "allUsers"
+}
