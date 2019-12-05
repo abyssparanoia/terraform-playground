@@ -4,6 +4,12 @@ variable "project_name" {
   }
 }
 
+variable "location" {
+  default = {
+    tokyo = "asia-northeast1"
+  }
+}
+
 variable "credential" {
   default = {
     data = "./serviceAccount.json"
