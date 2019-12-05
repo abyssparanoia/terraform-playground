@@ -1,18 +1,37 @@
+variable "project_name" {
+  default = {
+    tf-sample = "develop-sugimoto-rabee-jp"
+  }
+}
+
+variable "location" {
+  default = {
+    tokyo = "asia-northeast1"
+  }
+}
+
+variable "credential" {
+  default = {
+    data = "./serviceAccount.json"
+  }
+}
+
+
 provider "google" {
-  credentials = "${file("${var.credential.data}")}"
-  project     = "${lookup(var.project_name, "${terraform.workspace}")}"
-  region      = "asia-northeast1"
+  credentials = var.credential.data
+  project     = var.project_name.tf-sample
+  region      = var.location.tokyo
 }
 
 resource "google_app_engine_application" "app" {
-  project     = "${lookup(var.project_name, "${terraform.workspace}")}"
-  location_id = "${lookup(var.location, "${terraform.workspace}")}"
+  project     = var.project_name.tf-sample
+  location_id = var.location.tokyo
 }
 
 resource "google_sql_database_instance" "master" {
   name             = "master-instance"
   database_version = "POSTGRES_9_6"
-  region           = "${lookup(var.location, "${terraform.workspace}")}"
+  region           = var.location.tokyo
 
   settings {
     tier = "db-f1-micro"
@@ -21,7 +40,7 @@ resource "google_sql_database_instance" "master" {
 
 resource "google_storage_bucket" "contents" {
   name     = "develop-rabee-contents"
-  location = "${lookup(var.location, "${terraform.workspace}")}"
+  location = var.location.tokyo
 }
 
 resource "google_storage_bucket_access_control" "public_rule" {
