@@ -19,3 +19,7 @@ resource "google_sql_database_instance" "master" {
   }
 }
 
+resource "google_storage_bucket" "contents" {
+  name     = "develop-rabee-contents"
+  location = "${lookup(var.location, "${terraform.workspace}")}"
+}
